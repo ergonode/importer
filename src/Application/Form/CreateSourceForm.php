@@ -9,16 +9,15 @@ declare(strict_types = 1);
 
 namespace Ergonode\Importer\Application\Form;
 
-use Ergonode\Importer\Application\Form\Type\ColumnType;
-use Ergonode\Importer\Application\Model\Form\ConfigurationModel;
+use Ergonode\Importer\Application\Model\Form\UploadModel;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  */
-class ConfigurationForm extends AbstractType
+class CreateSourceForm extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -28,12 +27,14 @@ class ConfigurationForm extends AbstractType
     {
         $builder
             ->add(
-                'columns',
-                CollectionType::class,
+                'code',
+                TextType::class
+            )
+            ->add(
+                'source_type',
+                TextType::class,
                 [
-                    'allow_add' => true,
-                    'allow_delete' => true,
-                    'entry_type' => ColumnType::class,
+                    'property_path' => 'sourceType',
                 ]
             );
     }
@@ -52,8 +53,8 @@ class ConfigurationForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => ConfigurationModel::class,
-            'translation_domain' => 'import',
+            'data_class' => UploadModel::class,
+            'translation_domain' => 'upload',
         ]);
     }
 }

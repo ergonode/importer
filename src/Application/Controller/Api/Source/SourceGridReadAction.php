@@ -7,40 +7,38 @@
 
 declare(strict_types = 1);
 
-namespace Ergonode\Importer\Application\Controller\Api\Import;
+namespace Ergonode\Importer\Application\Controller\Api\Source;
 
 use Ergonode\Api\Application\Response\SuccessResponse;
-use Ergonode\Core\Domain\ValueObject\Language;
-use Ergonode\Grid\Renderer\GridRenderer;
-use Ergonode\Grid\RequestGridConfiguration;
-use Ergonode\Importer\Domain\Query\ImportQueryInterface;
-use Ergonode\Importer\Infrastructure\Grid\ImportGrid;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Ergonode\Importer\Domain\Entity\Source\AbstractSource;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Ergonode\Core\Domain\ValueObject\Language;
+use Ergonode\Grid\RequestGridConfiguration;
+use Ergonode\Importer\Infrastructure\Grid\SourceGrid;
+use Ergonode\Grid\Renderer\GridRenderer;
+use Ergonode\Importer\Domain\Query\SourceQueryInterface;
 
 /**
  * @Route(
- *     name="ergonode_import_list",
- *     path="/sources/{source}/imports",
- *     methods={"GET"},
- *     requirements={"source" = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"}
+ *     name="ergonode_source_grid",
+ *     path="/sources",
+ *     methods={"GET"}
  * )
  */
-class ImportGridReadAction
+class SourceGridReadAction
 {
     /**
-     * @var ImportGrid
+     * @var SourceGrid
      */
-    private ImportGrid $grid;
+    private SourceGrid $grid;
 
     /**
-     * @var ImportQueryInterface
+     * @var SourceQueryInterface
      */
-    private ImportQueryInterface $query;
+    private SourceQueryInterface $query;
 
     /**
      * @var GridRenderer
@@ -48,11 +46,11 @@ class ImportGridReadAction
     private GridRenderer $renderer;
 
     /**
-     * @param ImportGrid           $grid
-     * @param ImportQueryInterface $query
+     * @param SourceGrid           $grid
+     * @param SourceQueryInterface $query
      * @param GridRenderer         $renderer
      */
-    public function __construct(ImportGrid $grid, ImportQueryInterface $query, GridRenderer $renderer)
+    public function __construct(SourceGrid $grid, SourceQueryInterface $query, GridRenderer $renderer)
     {
         $this->grid = $grid;
         $this->query = $query;
@@ -122,21 +120,16 @@ class ImportGridReadAction
      *     description="Returns import collection",
      * )
      *
-     * @ParamConverter(class="Ergonode\Importer\Domain\Entity\Source\AbstractSource")
      * @ParamConverter(class="Ergonode\Grid\RequestGridConfiguration")
      *
-     * @param AbstractSource           $source
      * @param Language                 $language
      * @param RequestGridConfiguration $configuration
      *
      * @return Response
      */
-    public function __invoke(
-        AbstractSource $source,
-        Language $language,
-        RequestGridConfiguration $configuration
-    ): Response {
-        $dataSet = $this->query->getDataSet($source->getId());
+    public function __invoke(Language $language, RequestGridConfiguration $configuration): Response
+    {
+        $dataSet = $this->query->getDataSet();
 
         $data = $this->renderer->render(
             $this->grid,

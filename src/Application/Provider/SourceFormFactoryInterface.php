@@ -6,14 +6,14 @@
 
 declare(strict_types = 1);
 
-namespace Ergonode\Importer\Domain\Factory;
+namespace Ergonode\Importer\Application\Provider;
 
 use Ergonode\Importer\Domain\Entity\Source\AbstractSource;
-use Ergonode\SharedKernel\Domain\Aggregate\SourceId;
+use Symfony\Component\Form\FormInterface;
 
 /**
  */
-interface SourceFactoryInterface
+interface SourceFormFactoryInterface
 {
     /**
      * @param string $type
@@ -23,11 +23,9 @@ interface SourceFactoryInterface
     public function supported(string $type): bool;
 
     /**
-     * @param SourceId $sourceId
-     * @param string   $name
-     * @param array    $configuration
+     * @param AbstractSource|null $source
      *
-     * @return AbstractSource
+     * @return FormInterface
      */
-    public function create(SourceId $sourceId, string $name, array $configuration = []): AbstractSource;
+    public function create(AbstractSource $source = null): FormInterface;
 }

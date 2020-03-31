@@ -30,7 +30,7 @@ use Ergonode\Importer\Domain\Entity\Source\AbstractSource;
  *     requirements={"source" = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"}
  * )
  */
-class ImportGridReadAction
+class ImportGridAction
 {
     /**
      * @var ImportGrid
@@ -63,6 +63,12 @@ class ImportGridReadAction
      * @IsGranted("IMPORT_READ")
      *
      * @SWG\Tag(name="Import")
+     * @SWG\Parameter(
+     *     name="source",
+     *     in="path",
+     *     type="string",
+     *     description="Source Id",
+     * )
      * @SWG\Parameter(
      *     name="language",
      *     in="path",

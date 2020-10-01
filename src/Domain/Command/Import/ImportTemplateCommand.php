@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © Bold Brand Commerce Sp. z o.o. All rights reserved.
  * See LICENSE.txt for license details.
@@ -7,13 +6,14 @@
 
 declare(strict_types = 1);
 
-namespace Ergonode\Importer\Domain\Entity;
+namespace Ergonode\Importer\Domain\Command\Import;
 
 use Ergonode\SharedKernel\Domain\Aggregate\ImportId;
+use Ergonode\EventSourcing\Infrastructure\DomainCommandInterface;
 
 /**
  */
-class ImportError
+class ImportTemplateCommand implements DomainCommandInterface
 {
     /**
      * @var ImportId
@@ -23,25 +23,19 @@ class ImportError
     /**
      * @var string
      */
-    private string $message;
-
-    /**
-     * @var \DateTime
-     */
-    private \DateTime $createdAt;
+    private string $code;
 
     /**
      * @param ImportId $importId
-     * @param string   $message
+     * @param string   $code
      */
-    public function __construct(ImportId $importId, string $message)
+    public function __construct(ImportId $importId, string $code)
     {
         $this->importId = $importId;
-        $this->message = $message;
-        $this->createdAt = new \DateTime();
+        $this->code = $code;
     }
 
-       /**
+    /**
      * @return ImportId
      */
     public function getImportId(): ImportId
@@ -50,18 +44,10 @@ class ImportError
     }
 
     /**
-     * @return \DateTime
-     */
-    public function getCreatedAt(): \DateTime
-    {
-        return $this->createdAt;
-    }
-
-    /**
      * @return string
      */
-    public function getMessage(): string
+    public function getCode(): string
     {
-        return $this->message;
+        return $this->code;
     }
 }

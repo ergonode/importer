@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © Bold Brand Commerce Sp. z o.o. All rights reserved.
  * See LICENSE.txt for license details.
@@ -7,13 +6,14 @@
 
 declare(strict_types = 1);
 
-namespace Ergonode\Importer\Domain\Entity;
+namespace Ergonode\Importer\Domain\Command\Import;
 
 use Ergonode\SharedKernel\Domain\Aggregate\ImportId;
+use Ergonode\EventSourcing\Infrastructure\DomainCommandInterface;
 
 /**
  */
-class ImportError
+class ImportMultimediaFromWebCommand implements DomainCommandInterface
 {
     /**
      * @var ImportId
@@ -23,25 +23,26 @@ class ImportError
     /**
      * @var string
      */
-    private string $message;
+    private string $url;
 
     /**
-     * @var \DateTime
+     * @var string
      */
-    private \DateTime $createdAt;
+    private string $name;
 
     /**
      * @param ImportId $importId
-     * @param string   $message
+     * @param string   $url
+     * @param string   $name
      */
-    public function __construct(ImportId $importId, string $message)
+    public function __construct(ImportId $importId, string $url, string $name)
     {
         $this->importId = $importId;
-        $this->message = $message;
-        $this->createdAt = new \DateTime();
+        $this->url = $url;
+        $this->name = $name;
     }
 
-       /**
+    /**
      * @return ImportId
      */
     public function getImportId(): ImportId
@@ -50,18 +51,18 @@ class ImportError
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
-    public function getCreatedAt(): \DateTime
+    public function getUrl(): string
     {
-        return $this->createdAt;
+        return $this->url;
     }
 
     /**
      * @return string
      */
-    public function getMessage(): string
+    public function getName(): string
     {
-        return $this->message;
+        return $this->name;
     }
 }

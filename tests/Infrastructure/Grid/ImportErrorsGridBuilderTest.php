@@ -10,10 +10,10 @@ namespace Ergonode\Importer\Tests\Infrastructure\Grid;
 
 use Ergonode\Core\Domain\ValueObject\Language;
 use Ergonode\Grid\GridConfigurationInterface;
-use Ergonode\Importer\Infrastructure\Grid\ImportErrorsGrid;
+use Ergonode\Importer\Infrastructure\Grid\ImportErrorsGridBuilder;
 use PHPUnit\Framework\TestCase;
 
-class ImportErrorsGridTest extends TestCase
+class ImportErrorsGridBuilderTest extends TestCase
 {
     public function testGridInit(): void
     {
@@ -22,9 +22,9 @@ class ImportErrorsGridTest extends TestCase
         /** @var Language $language */
         $language = $this->createMock(Language::class);
 
-        $grid = new ImportErrorsGrid();
+        $builder = new ImportErrorsGridBuilder();
 
-        $grid->init($configuration, $language);
+        $grid = $builder->build($configuration, $language);
 
         self::assertNotEmpty($grid->getColumns());
     }
